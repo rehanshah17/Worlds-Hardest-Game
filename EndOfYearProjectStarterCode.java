@@ -1,8 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.Color;
 public class EndOfYearProjectStarterCode extends JPanel implements KeyListener,Runnable
 {
@@ -10,7 +8,8 @@ public class EndOfYearProjectStarterCode extends JPanel implements KeyListener,R
 	private int y;
 	private int a;
 	private int b;
-	private Rectangle h1,h2,h3,h4,h5,h6,h7,h8;
+	private int fails;
+	private Rectangle h1,h2,h3,h4,h5,h6,h7,h8, p;
 	private Rectangle v1,v2,v3,v4,v5,v6,v7,v8;
 	private JFrame frame;
 	private Thread t;
@@ -26,9 +25,10 @@ public class EndOfYearProjectStarterCode extends JPanel implements KeyListener,R
 	{
 		frame=new JFrame();
 		x=100;
-		y=100;
+		y=180;
 		a = 200;
 		b = 100;
+		fails = 0;
 		gre =  new Color(158, 242, 155);
 		backGround = new Color(171,162,252);
 		speed = 2;
@@ -49,12 +49,6 @@ public class EndOfYearProjectStarterCode extends JPanel implements KeyListener,R
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
 
-		//all painting (AND ONLY PAINTING) happens here!
-		//Don't use this method to deal with mathematics
-		//The painting imps aren't fond of math.
-
-		//fill background
-
 		g2d.setPaint(Color.BLACK);
 		g2d.fillRect(0,0,810,640);
 		g2d.setPaint(backGround);
@@ -65,7 +59,7 @@ public class EndOfYearProjectStarterCode extends JPanel implements KeyListener,R
 		g2d.setColor(Color.WHITE);
 		g2d.setFont(f);
 		g2d.drawString("Level: 1",25,40);
-		g2d.drawString("Fails: 1",600,40);
+		g2d.drawString("Fails:" + fails,600,40);
 
 		//draw canyon
 		g2d.setColor(gre);
@@ -77,13 +71,12 @@ public class EndOfYearProjectStarterCode extends JPanel implements KeyListener,R
 		g2d.fillRect(180,160,5,290);//leftRight border v2
 
 
-
-
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(180,400,100,50);//first connecter rect
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(180,400,45,5);//top connector border h3
 		g2d.fillRect(280,400,5,55);//right connector border v3
+
 
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(220,210,320,190);//big middle rect
@@ -93,6 +86,7 @@ public class EndOfYearProjectStarterCode extends JPanel implements KeyListener,R
 		g2d.fillRect(280,400,260,5);//bottom middle rect border h5
 		g2d.fillRect(540,210,5,195);//right middle rect border v5
 
+		
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(480,160,100,50);//2nd connecter rect
 		g2d.setColor(Color.BLACK);
@@ -108,6 +102,7 @@ public class EndOfYearProjectStarterCode extends JPanel implements KeyListener,R
 		g2d.fillRect(710,160,5,290);//rightmost right rect border v8
 		g2d.fillRect(580,450,135,5);//bottom right rect border h8
 
+		
 		//Your character
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(x,y,29,29);
@@ -119,6 +114,16 @@ public class EndOfYearProjectStarterCode extends JPanel implements KeyListener,R
 		g2d.fillOval(a,b,18,18);
 		g2d.setColor(Color.BLUE);
 		g2d.fillOval(a+3,b+3,12,12);
+
+		g2d.setColor(Color.BLACK);
+		g2d.fillOval(a,b,18,18);
+		g2d.setColor(Color.BLUE);
+		g2d.fillOval(a,b,12,12);
+
+		g2d.setColor(Color.BLACK);
+		g2d.fillOval(a,b,18,18);
+		g2d.setColor(Color.BLUE);
+		g2d.fillOval(a,b,12,12);
 	}
 	public void run()
 		{
@@ -160,9 +165,28 @@ public class EndOfYearProjectStarterCode extends JPanel implements KeyListener,R
 					h7 = new Rectangle(480,160,230,5);
 					h8 = new Rectangle(580,450,135,5);
 
+					if(p.intersects(h1) ||p.intersects(h3) ||p.intersects(h4) ||p.intersects(h7))
+					{
+						y+=1;
+						
+					}
+					if(p.intersects(h1) ||p.intersects(h3) ||p.intersects(h4) ||p.intersects(h7))
+					{
+					
+						y-=1;
+					}
+					
+					if(p.intersects(v1) ||p.intersects(v4) ||p.intersects(v6) ||p.intersects(v7))
+					{
+						x+=1;
+					}
+					if(p.intersects(v2) ||p.intersects(v3) ||p.intersects(v5) ||p.intersects(v8))
+					{
+						x-=1;
+					}
 
-
-
+					x += hori;
+					y += vert;
 					//this is the code for delay
 					try
 					{
@@ -170,8 +194,7 @@ public class EndOfYearProjectStarterCode extends JPanel implements KeyListener,R
 					}catch(InterruptedException e)
 					{
 					}
-					x += hori;
-					y += vert;
+					
 					repaint();
 				}
 			}
@@ -207,9 +230,9 @@ public class EndOfYearProjectStarterCode extends JPanel implements KeyListener,R
 	{
 		//necessary to implement KeyListener
 	}
-	public static void main(String args[])
+	public static void main(String[] args)
 	{
-		EndOfYearProjectStarterCode app=new EndOfYearProjectStarterCode();
+		EndOfYearProjectStarterCode app = new EndOfYearProjectStarterCode();
 	}
 
 }
